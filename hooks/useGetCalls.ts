@@ -10,7 +10,7 @@ export const useGetCalls = () => {
 
     useEffect(() => {
         const loadCalls = async () => {
-            if (!client || user?.id) return
+            if (!client || !user?.id) return
             setIsLoading(true)
 
             try {
@@ -19,8 +19,8 @@ export const useGetCalls = () => {
                     filter_conditions: {
                         starts_at: { $exists: true },
                         $or: [
-                            { created_by_user_id: user?.id },
-                            { members: { $in: [user?.id] } },
+                            { created_by_user_id: user.id },
+                            { members: { $in: [user.id] } },
                         ],
                     },
                 })
@@ -31,7 +31,9 @@ export const useGetCalls = () => {
                 setIsLoading(false)
             }
         }
-        loadCalls()
+        loadCalls().then(() => {
+            //console.log("useGetCalls: " + calls)
+        })
     }, [client, user?.id])
 
     const now = new Date()
